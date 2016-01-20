@@ -1,0 +1,31 @@
+{
+  "generator-angularjs-library": {
+    "props": {
+      "author": {
+        "name": "Niklas Plessing",
+        "email": "contact@niklasplessing.net"
+      },
+      "libraryName": {
+        "original": "angular-cordova-network-status",
+        "camelized": "angularCordovaNetworkStatus",
+        "dasherized": "angular-cordova-network-status",
+        "slugified": "angular-cordova-network-status",
+        "parts": [
+          "angular",
+          "cordova",
+          "network",
+          "status"
+        ]
+      },
+      "includeModuleDirectives": false,
+      "includeModuleFilters": false,
+      "includeModuleServices": true,
+      "includeAngularModuleResource": false,
+      "includeAngularModuleCookies": false,
+      "includeAngularModuleSanitize": false,
+      "librarySrcDirectory": "src/angular-cordova-network-status",
+      "libraryUnitTestDirectory": "test/unit/angular-cordova-network-status",
+      "libraryUnitE2eDirectory": "test/e2e/angular-cordova-network-status"
+    }
+  }
+}
