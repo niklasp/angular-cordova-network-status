@@ -11,14 +11,27 @@
       });
 
   // Modules
-  angular.module('angularCordovaNetworkStatus.services', []);
+  angular.module('angularCordovaNetworkStatus.constants', []);
+  angular.module('angularCordovaNetworkStatus.services', [
+    'angularCordovaNetworkStatus.constants'
+  ]);
   angular.module('angularCordovaNetworkStatus',
       [
+          'angularCordovaNetworkStatus.constants',
           'angularCordovaNetworkStatus.config',
           'angularCordovaNetworkStatus.services'
       ]);
 
 })(angular);
+
+'use strict';
+
+angular
+  .module('angularCordovaNetworkStatus.constants', [])
+  .constant('NETWORK_EVENTS', {
+    online: 'network-status-online',
+    offline: 'network-status-offline',
+  });
 
 /* globals ionic */
 
@@ -28,7 +41,7 @@ angular
   .module('angularCordovaNetworkStatus.services')
   .factory('NetworkStatusMonitor', factory);
 
-function factory($rootScope, $cordovaNetwork) {
+function factory($rootScope, $cordovaNetwork, NETWORK_EVENTS) {
   var service = {
     isOnline: isOnline,
     isOffline: isOffline,
@@ -57,22 +70,22 @@ function factory($rootScope, $cordovaNetwork) {
     if (ionic.Platform.isWebView()) {
 
       $rootScope.$on('$cordovaNetwork:online', function () {
-        //$log.log('went online');
+        $rootScope.$broadcast(NETWORK_EVENTS.online);
       });
 
       $rootScope.$on('$cordovaNetwork:offline', function () {
-        //$log.log('went offline');
+        $rootScope.$broadcast(NETWORK_EVENTS.offline);
       });
 
     }
     else {
 
       window.addEventListener('online', function () {
-        //$log.log('went online');
+        $rootScope.$broadcast(NETWORK_EVENTS.online);
       }, false);
 
       window.addEventListener('offline', function () {
-        //$log.log('went offline');
+        $rootScope.$broadcast(NETWORK_EVENTS.offline);
       }, false);
     }
   }

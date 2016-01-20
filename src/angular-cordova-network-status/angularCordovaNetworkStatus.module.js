@@ -11,9 +11,13 @@
       });
 
   // Modules
-  angular.module('angularCordovaNetworkStatus.services', []);
+  angular.module('angularCordovaNetworkStatus.constants', []);
+  angular.module('angularCordovaNetworkStatus.services', [
+    'angularCordovaNetworkStatus.constants'
+  ]);
   angular.module('angularCordovaNetworkStatus',
       [
+          'angularCordovaNetworkStatus.constants',
           'angularCordovaNetworkStatus.config',
           'angularCordovaNetworkStatus.services'
       ]);
