@@ -4,54 +4,62 @@
 
 angular
   .module('angularCordovaNetworkStatus.services')
-  .factory('NetworkStatusMonitor', factory);
+  .provider('NetworkStatusMonitor', networkStatusProvider);
 
-function factory($rootScope, $cordovaNetwork, NETWORK_EVENTS) {
-  var service = {
-    isOnline: isOnline,
-    isOffline: isOffline,
-    watchNetworkStatus: watchNetworkStatus
-  };
+function networkStatusProvider() {
+  /* jshint validthis:true */
+  this.$get = networkHelperFactory;
 
-  return service;
+  function networkHelperFactory($rootScope, $cordovaNetwork, NETWORK_EVENTS) {
 
-  function isOnline (){
-    if (ionic.Platform.isWebView()) {
-      return $cordovaNetwork.isOnline();
-    } else {
-      return navigator.onLine;
+    var service = {
+      isOnline: isOnline,
+      isOffline: isOffline,
+      watchNetworkStatus: watchNetworkStatus
+    };
+
+    return service;
+
+    ///////////////// ///////////////// /////////////////
+
+    function isOnline (){
+      if (ionic.Platform.isWebView()) {
+        return $cordovaNetwork.isOnline();
+      } else {
+        return navigator.onLine;
+      }
     }
-  }
 
-  function isOffline (){
-    if (ionic.Platform.isWebView()) {
-      return !$cordovaNetwork.isOnline();
-    } else {
-      return !navigator.onLine;
+    function isOffline (){
+      if (ionic.Platform.isWebView()) {
+        return !$cordovaNetwork.isOnline();
+      } else {
+        return !navigator.onLine;
+      }
     }
-  }
 
-  function watchNetworkStatus () {
-    if (ionic.Platform.isWebView()) {
+    function watchNetworkStatus () {
+      if (ionic.Platform.isWebView()) {
 
-      $rootScope.$on('$cordovaNetwork:online', function () {
-        $rootScope.$broadcast(NETWORK_EVENTS.online);
-      });
+        $rootScope.$on('$cordovaNetwork:online', function () {
+          $rootScope.$broadcast(NETWORK_EVENTS.online);
+        });
 
-      $rootScope.$on('$cordovaNetwork:offline', function () {
-        $rootScope.$broadcast(NETWORK_EVENTS.offline);
-      });
+        $rootScope.$on('$cordovaNetwork:offline', function () {
+          $rootScope.$broadcast(NETWORK_EVENTS.offline);
+        });
 
-    }
-    else {
+      }
+      else {
 
-      window.addEventListener('online', function () {
-        $rootScope.$broadcast(NETWORK_EVENTS.online);
-      }, false);
+        window.addEventListener('online', function () {
+          $rootScope.$broadcast(NETWORK_EVENTS.online);
+        }, false);
 
-      window.addEventListener('offline', function () {
-        $rootScope.$broadcast(NETWORK_EVENTS.offline);
-      }, false);
+        window.addEventListener('offline', function () {
+          $rootScope.$broadcast(NETWORK_EVENTS.offline);
+        }, false);
+      }
     }
   }
 }
