@@ -4,13 +4,32 @@
 
 angular
   .module('angularCordovaNetworkStatus.services')
-  .provider('NetworkStatusMonitor', networkStatusProvider);
+  .provider('NetworkStatusMonitor', function NetworkStatusMonitorProvider () {
 
-function networkStatusProvider() {
+  // this is just a service with the provider function !!
+
   /* jshint validthis:true */
-  this.$get = networkHelperFactory;
+  this.$get = function ($rootScope, $injector, NETWORK_EVENTS) {
 
-  function networkHelperFactory($rootScope, $cordovaNetwork, NETWORK_EVENTS) {
+    var dummyService = {
+      isOnline: function () { return false; },
+      isOffline: function () { return true; },
+      watchNetworkStatus: function(){}
+    };    
+
+    if (typeof ionic === 'undefined') {
+      console.log('The angular-cordova-network-status is made to run with ionic' +
+       'installed. Please install the ionic framework.');
+      return dummyService;
+    }
+    try {
+      var $cordovaNetwork = $injector.get('$cordovaNetwork');
+    } catch(err) {
+      console.log('You need to install cordova network plugin for ' +
+      'angular-cordova-network-status to work. Do it via: \n$ cordova plugin ' +
+      'add cordova-plugin-network-information');
+      return dummyService;
+    }
 
     var service = {
       isOnline: isOnline,
@@ -61,5 +80,5 @@ function networkStatusProvider() {
         }, false);
       }
     }
-  }
-}
+  };
+});
